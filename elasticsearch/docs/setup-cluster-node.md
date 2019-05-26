@@ -84,7 +84,7 @@ POST                                                         # 创建对象
 DELETE                                                       # 删除对象
 HEAD                                                         # 获取头信息
 
-# Elasticsearch内置的Rest接口
+# Elasticsearch内置的Rest接口（注意：实际应用当中请将 index 替换成对象名称）
 /index/_search                                               # 搜索指定索引下的数据
 /_aliases                                                    # 获取或操作索引的别名(所有的)
 /index/                                                      # 查看指定索引的详细信息
