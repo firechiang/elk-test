@@ -12,7 +12,7 @@ $ vi /etc/security/limits.conf
 # 加载配置，使上面的配置生效
 $ sysctl -p          
 ```
-#### 一、创建部署用户，集群的每台机器都要创建(Elasticsearch不建议使用root账户部署)
+#### 二、创建部署用户，集群的每台机器都要创建(Elasticsearch不建议使用root账户部署)
 ```bash
 $ useradd elk-admin                                                               # 创建 elk-admin 用户
 $ echo "jiang" | passwd --stdin elk-admin                                         # 为elk-admin 用户创建密码，密码是：jiang
@@ -24,14 +24,14 @@ $ su elk-admin                                                                  
 ```
 
 
-#### 二、下载安装
+#### 三、下载安装
 ```bash
 $ cd /home/tools
 $ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.1.0-linux-x86_64.tar.gz
 $ tar -zxvf elasticsearch-7.1.0-linux-x86_64.tar.gz -C ../                        # 解压到上层目录
 ```
 
-#### 三、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]配置文件
+#### 四、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]配置文件
 ```bash
 cluster.name: myElasticsearch                                # 集群名称
 http.port: 9200                                              # http 通信端口
@@ -45,19 +45,19 @@ discovery.seed_hosts: ["server001", "server002","server003"] # 集群节点列�
 cluster.initial_master_nodes: ["node01", "node02","node03"]  # 集群主节点名称列表，如果是新加节点到旧的集群好像不能写自己（注意：这里填的是名称，就是配置项 node.name 的值）
 ```
 
-#### 四、分发安装文件到集群各个节点
+#### 五、分发安装文件到集群各个节点
 ```bash
 $ scp -r /home/elasticsearch-7.1.0 elk-admin@server002:/home
 $ scp -r /home/elasticsearch-7.1.0 elk-admin@server003:/home
 ```
 
-#### 五、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]集群各个节点的名称和服务绑定地址
+#### 六、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]集群各个节点的名称和服务绑定地址
 ```bash
 node.name: node01                                            # 节点名称（集群唯一）
 network.host: server001                                      # 服务绑定地址（修改为各个节点的主机名或IP）
 ```
 
-#### 六、配置集群各个节点上的环境变量[vi ~/.bashrc]在末尾添加如下内容
+#### 七、配置集群各个节点上的环境变量[vi ~/.bashrc]在末尾添加如下内容
 ```bash
 export ELASTICSEARCH_HOME=/home/elasticsearch-7.1.0
 PATH=$PATH:$ELASTICSEARCH_HOME/bin                           # linux以 : 号隔开，windows以 ; 号隔开
@@ -66,7 +66,7 @@ $ source ~/.bashrc                                           # （系统重读�
 $ echo $ELASTICSEARCH_HOME
 ```
 
-#### 七、启动集群各个节点上的Elasticsearch（单个节点信息：http://192.168.229.133:9200）
+#### 八、启动集群各个节点上的Elasticsearch（单个节点信息：http://192.168.229.133:9200）
 ```bash
 $ elasticsearch                                              # 前台启动 Elasticsearch 节点（建议测试使用，因为前台显示日志）
 $ elasticsearch -d                                           # 后台启动 Elasticsearch 节点（建议生产使用）
