@@ -41,7 +41,7 @@ node.master: true
 node.data: true                                              #允许该节点存储数据(默认开启)
 path.data: /home/elasticsearch-7.1.0/data                    # 数据存储目录(注意：手动创建目录)
 path.logs: /home/elasticsearch-7.1.0/logs                    # 日志存储目录 (注意：手动创建目录)
-discovery.seed_hosts: ["server001", "server002","server003"] # 集群节点列表（注意：填写IP或主机名）
+discovery.seed_hosts: ["server001", "server002","server003"] # 种子节点列表（注意：填写IP或主机名）
 cluster.initial_master_nodes: ["node01", "node02","node03"]  # 初始化集群参选主节点名称列表，如果是新加节点到旧的集群好像不能写自己（注意：这里填的是名称，就是配置项 node.name 的值）
 ```
 
