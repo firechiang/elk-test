@@ -33,12 +33,11 @@ $ tar -zxvf elasticsearch-7.1.0-linux-x86_64.tar.gz -C ../                      
 
 #### 四、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]配置文件
 ```bash
-cluster.name: myElasticsearch                                # 集群名称
 http.port: 9200                                              # http 通信端口
 transport.tcp.port: 9400                                     # 集群内部通信端口
 #指定该节点是否有资格被选举成为master节点，默认是true，es是默认集群中的第一台机器为master，如果这台机挂了就会重新选举master
 node.master: true
-node.data: true                                              #允许该节点存储数据(默认开启)
+node.data: true                                              # 允许该节点存储数据(默认开启)
 node.name: node01                                            # 节点名称
 network.host: server001                                      # 服务绑定地址
 path.data: /home/elasticsearch-7.1.0/data                    # 数据存储目录(注意：手动创建目录)

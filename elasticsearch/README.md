@@ -1,6 +1,7 @@
-#### [Centos 单机搭建][1]
-#### [Centos 集群搭建][2]
-#### [Rest 接口使用][3]
+#### [一、Windows 开发搭建][1]
+#### [二、Centos 单机搭建][2]
+#### [三、Centos 集群搭建][3]
+#### [四、Rest 接口使用][4]
 #### Elasticsearch核心基于Lucene的倒排索引
 ```bash
 # 数据示例(注：后面跟的是行号)
@@ -11,6 +12,8 @@
 我(1:1){0}                    # (1:1)表示：数据在第1行，出现1次，{0}表示：数据所在文件的偏移量
 中国(1:1){2},(2:2){0,15}     
 ```
-[1]: https://github.com/firechiang/elk-test/tree/master/elasticsearch/docs/setup-single-node.md
-[2]: https://github.com/firechiang/elk-test/tree/master/elasticsearch/docs/setup-cluster-node.md
-[3]: https://github.com/firechiang/elk-test/tree/master/elasticsearch/docs/setup-rest-use.md
+
+[1]: https://github.com/firechiang/elk-test/tree/master/elasticsearch/docs/windows-single-node.md
+[2]: https://github.com/firechiang/elk-test/tree/master/elasticsearch/docs/setup-single-node.md
+[3]: https://github.com/firechiang/elk-test/tree/master/elasticsearch/docs/setup-cluster-node.md
+[4]: https://github.com/firechiang/elk-test/tree/master/elasticsearch/docs/setup-rest-use.md

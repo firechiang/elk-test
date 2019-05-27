@@ -38,7 +38,7 @@ http.port: 9200                                              # http 通信端口
 transport.tcp.port: 9400                                     # 集群内部通信端口
 #指定该节点是否有资格被选举成为master节点，默认是true，es是默认集群中的第一台机器为master，如果这台机挂了就会重新选举master
 node.master: true
-node.data: true                                              #允许该节点存储数据(默认开启)
+node.data: true                                              # 允许该节点存储数据(默认开启)
 path.data: /home/elasticsearch-7.1.0/data                    # 数据存储目录(注意：手动创建目录)
 path.logs: /home/elasticsearch-7.1.0/logs                    # 日志存储目录 (注意：手动创建目录)
 discovery.seed_hosts: ["server001", "server002","server003"] # 种子节点列表（注意：填写IP或主机名）
