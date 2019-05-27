@@ -3,8 +3,8 @@
 # 修改 sysctl.conf 配置如下
 $ vi /etc/sysctl.conf
 vm.swappiness=10                                                                  # 定义内核交换内存页面的积极程度。较高的值会增加攻击性，较低的值会减少交换量。建议使用10来保证交换延迟
-vm.max_map_count=655360                                                           # 限制进程最大内存映射区域数
-fs.file-max=655360                                                                # 现在系统文件描述符数
+vm.max_map_count=655360                                                           # 限制进程最大内存映射区域数（控制进程能够打开文件句柄的数量。提供对shell及其启动的进程的可用文件句柄的控制。这是进程级别的）
+fs.file-max=2000000                                                               # 系统能够打开文件句柄的数量（系统的限制，并不是针对用户）
 
 # 修改 limits.conf 配置如下
 $ vi /etc/security/limits.conf
@@ -12,7 +12,10 @@ $ vi /etc/security/limits.conf
 * hard nofile 655350                                                              # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符
 
 # 加载配置，使上面的配置生效
-$ sysctl -p          
+$ sysctl -p    
+$ cat /proc/sys/fs/file-max                                                       # 查看系统能够打开文件句柄的数量
+$ ulimit -n                                                                       # 查看进程能够打开文件句柄的数量
+      
 ```
 #### 二、创建部署用户，集群的每台机器都要创建(Elasticsearch不建议使用root账户部署)
 ```bash
