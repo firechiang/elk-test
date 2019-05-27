@@ -13,8 +13,9 @@ $ vi /etc/security/limits.conf
 
 # 加载配置，使上面的配置生效
 $ sysctl -p   
-$ cat /proc/sys/fs/file-max                                                       # 查看系统能够打开文件句柄的数量
-$ ulimit -n                                                                       # 查看进程能够打开文件句柄的数量       
+$ cat /proc/sys/fs/file-max                                                       # 查看系统能够打开文件句柄的最大数量
+$ ulimit -n                                                                       # 查看进程能够打开文件句柄的数量  
+$ cat /proc/sys/fs/file-nr                                                        # 查看系统能够打开文件句柄的最小值到最大值  
 ```
 #### 二、创建部署用户，集群的每台机器都要创建(Elasticsearch不建议使用root账户部署)
 ```bash
