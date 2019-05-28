@@ -15,13 +15,18 @@ $ vi /etc/security/limits.conf
 $ cat /sys/block/sda/queue/scheduler                         # 查看磁盘IO调度策略（方括号里面的是当前选定的调度策略），如果不是noop或deadline，请将其修改成noop或deadline
 $ vi /etc/default/grub                                       # 找到 GRUB_CMDLINE_LINUX 行，在最后加入 elevator=deadline，比如：GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet elevator=deadline"
 $ grub2-mkconfig -o /boot/grub2/grub.cfg                     # BIOS-Based模式，重建  grub.cfg 配置和磁盘调度IO策略（UEFI-Based模式重建使用：grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg）
-$ shutdown -r now                                            # 重启机器使磁盘调度IO策略生效
+
+# 关闭 numa
+$ dmesg | grep -i numa                                       # 查看 numa 是否关闭
+$ vi /etc/default/grub                                       # 找到 GRUB_CMDLINE_LINUX 行，在最后加入 numa=off，比如：GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet numa=off"
+$ grub2-mkconfig -o /boot/grub2/grub.cfg                     # BIOS-Based模式，重建  grub.cfg 配置和关闭 numa（UEFI-Based模式重建使用：grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg）
 
 # 加载配置，使上面的配置生效
 $ sysctl -p   
 $ cat /proc/sys/fs/file-max                                  # 查看系统能够打开文件句柄的最大数量
 $ ulimit -n                                                  # 查看进程能够打开文件句柄的数量  
 $ cat /proc/sys/fs/file-nr                                   # 查看系统能够打开文件句柄的最小值到最大值 
+$ shutdown -r now                                            # 重启机器使磁盘调度IO策略生效
 ```
 #### 二、创建部署用户，集群的每台机器都要创建(Elasticsearch不建议使用root账户部署)
 ```bash
