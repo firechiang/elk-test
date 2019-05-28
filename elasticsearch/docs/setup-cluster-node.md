@@ -1,6 +1,6 @@
 #### 一、系统调优配置，修改如下配置，请使用root账号（注意：集群的每个节点都要修改）
 ```bash
-$ ulimit -a                                                  # 所有文件描述符详细信息
+$ ulimit -a                                                  # 查看所有文件句柄数描述信息
 
 # 修改 sysctl.conf 配置如下
 $ vi /etc/sysctl.conf
