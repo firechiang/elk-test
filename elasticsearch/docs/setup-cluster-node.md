@@ -2,33 +2,37 @@
 ```bash
 # 修改 sysctl.conf 配置如下
 $ vi /etc/sysctl.conf
-vm.swappiness=10                                                                  # 定义内核交换内存页面的积极程度。较高的值会增加攻击性，较低的值会减少交换量。建议使用10来保证交换延迟
-vm.max_map_count=655360                                                           # 限制进程最大内存映射区域数（控制进程能够打开文件句柄的数量。提供对shell及其启动的进程的可用文件句柄的控制。这是进程级别的）
-fs.file-max=2000000                                                               # 系统能够打开文件句柄的数量（系统的限制，并不是针对用户）
+vm.swappiness=10                                             # 定义内核交换内存页面的积极程度。较高的值会增加攻击性，较低的值会减少交换量。建议使用10来保证交换延迟
+vm.max_map_count=655360                                      # 限制进程最大内存映射区域数（控制进程能够打开文件句柄的数量。提供对shell及其启动的进程的可用文件句柄的控制。这是进程级别的）
+fs.file-max=2000000                                          # 系统能够打开文件句柄的数量（系统的限制，并不是针对用户）
 
 # 修改 limits.conf 配置如下
 $ vi /etc/security/limits.conf
-* soft nofile 655350                                                              # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符
-* hard nofile 655350                                                              # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符
+* soft nofile 655350                                         # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符
+* hard nofile 655350                                         # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符
 
 # 修改磁盘调度IO策略
-$ cat /sys/block/sda/queue/scheduler                                              # 查看磁盘IO调度策略（方括号里面的是当前选定的调度策略），如果不是noop或deadline，请将其修改成noop或deadline
+$ cat /sys/block/sda/queue/scheduler                         # 查看磁盘IO调度策略（方括号里面的是当前选定的调度策略），如果不是noop或deadline，请将其修改成noop或deadline
+$ vi /etc/default/grub                                       # 找到 GRUB_CMDLINE_LINUX 行，在最后加入 elevator=deadline，比如：GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet elevator=deadline"
+$ grub2-mkconfig -o /boot/grub2/grub.cfg                     # BIOS-Based模式，重建  grub.cfg 配置和磁盘调度IO策略（UEFI-Based模式重建使用：grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg）
+$ shutdown -r now                                            # 重启机器使磁盘调度IO策略生效
 
 # 加载配置，使上面的配置生效
 $ sysctl -p   
-$ cat /proc/sys/fs/file-max                                                       # 查看系统能够打开文件句柄的最大数量
-$ ulimit -n                                                                       # 查看进程能够打开文件句柄的数量  
-$ cat /proc/sys/fs/file-nr                                                        # 查看系统能够打开文件句柄的最小值到最大值  
+$ cat /proc/sys/fs/file-max                                  # 查看系统能够打开文件句柄的最大数量
+$ ulimit -n                                                  # 查看进程能够打开文件句柄的数量  
+$ cat /proc/sys/fs/file-nr                                   # 查看系统能够打开文件句柄的最小值到最大值 
 ```
 #### 二、创建部署用户，集群的每台机器都要创建(Elasticsearch不建议使用root账户部署)
 ```bash
-$ useradd elk-admin                                                               # 创建 elk-admin 用户
-$ echo "jiang" | passwd --stdin elk-admin                                         # 为elk-admin 用户创建密码，密码是：jiang
-$ echo "elk-admin ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/elk-admin  # 为elk-admin 用户授权，并生成授权文件
-$ cat /etc/sudoers.d/elk-admin                                                    # 查看授权文件
-$ chmod 0440 /etc/sudoers.d/elk-admin                                             # 修改授权文件权限
-$ chown elk-admin:elk-admin /home /home/tools                                     # 将/home和/home/tools两个目录的权限授给elk-admin用户
-$ su elk-admin                                                                    # 切换到elk-admin
+$ useradd elk-admin                                          # 创建 elk-admin 用户
+$ echo "jiang" | passwd --stdin elk-admin                    # 为elk-admin 用户创建密码，密码是：jiang
+# 为elk-admin 用户授权，并生成授权文件
+$ echo "elk-admin ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/elk-admin  
+$ cat /etc/sudoers.d/elk-admin                               # 查看授权文件
+$ chmod 0440 /etc/sudoers.d/elk-admin                        # 修改授权文件权限
+$ chown elk-admin:elk-admin /home /home/tools                # 将/home和/home/tools两个目录的权限授给elk-admin用户
+$ su elk-admin                                               # 切换到elk-admin
 ```
 
 
@@ -36,7 +40,7 @@ $ su elk-admin                                                                  
 ```bash
 $ cd /home/tools
 $ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.1.0-linux-x86_64.tar.gz
-$ tar -zxvf elasticsearch-7.1.0-linux-x86_64.tar.gz -C ../                        # 解压到上层目录
+$ tar -zxvf elasticsearch-7.1.0-linux-x86_64.tar.gz -C ../   # 解压到上层目录       
 ```
 
 #### 四、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]配置文件
@@ -51,7 +55,7 @@ path.data: /home/elasticsearch-7.1.0/data                    # 数据存储目�
 path.logs: /home/elasticsearch-7.1.0/logs                    # 日志存储目录 (注意：手动创建目录)
 discovery.seed_hosts: ["server001", "server002","server003"] # 种子节点列表（注意：填写IP或主机名）
 cluster.initial_master_nodes: ["node01", "node02","node03"]  # 初始化集群参选主节点名称列表，如果是新加节点到旧的集群好像不能写自己（注意：这里填的是名称，就是配置项 node.name 的值）
-gateway.recover_after_nodes: 3                               #网关控制在n个节点启动之后才恢复整个集群 (建议设置为集群节点数量的一半以上)
+gateway.recover_after_nodes: 3                               # 网关控制在n个节点启动之后才恢复整个集群 (建议设置为集群节点数量的一半以上)
 xpack.security.enabled: true                                 # 是否开启安全验证(配置项里面没有，需手动添加)
 ```
 
