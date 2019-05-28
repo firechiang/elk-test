@@ -6,7 +6,6 @@ $ ulimit -a                                            # 所有文件描述符�
 $ vi /etc/sysctl.conf
 vm.swappiness=10                                       # 定义内核交换内存页面的积极程度。较高的值会增加攻击性，较低的值会减少交换量。建议使用10来保证交换延迟
 vm.max_map_count=655360                                # 限制进程最大内存映射区域数，单个jvm能开启的最大线程数为其一半（控制进程能够打开文件句柄的数量。提供对shell及其启动的进程的可用文件句柄的控制。这是进程级别的）
-fs.file-max=2000000                                    # 系统能够打开文件句柄的数量（系统的限制，并不是针对用户）
 
 # 修改 limits.conf 配置如下
 $ vi /etc/security/limits.conf
@@ -29,9 +28,7 @@ $ grub2-mkconfig -o /boot/grub2/grub.cfg               # BIOS-Based模式，重�
 
 # 加载配置，使上面的配置生效
 $ sysctl -p   
-$ cat /proc/sys/fs/file-max                            # 查看系统能够打开文件句柄的最大数量
 $ ulimit -n                                            # 查看进程能够打开文件句柄的数量  
-$ cat /proc/sys/fs/file-nr                             # 查看系统能够打开文件句柄的最小值到最大值 
 $ shutdown -r now                                      # 重启机器使磁盘调度IO策略生效
 ```
 #### 二、创建部署用户，集群的每台机器都要创建(Elasticsearch不建议使用root账户部署)
