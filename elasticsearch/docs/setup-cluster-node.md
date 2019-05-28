@@ -11,6 +11,9 @@ $ vi /etc/security/limits.conf
 * soft nofile 655350                                                              # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符
 * hard nofile 655350                                                              # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符
 
+# 修改磁盘调度IO策略
+$ cat /sys/block/sda/queue/scheduler                                              # 查看磁盘IO调度策略（方括号里面的是当前选定的调度策略），如果不是noop或deadline，请将其修改成noop或deadline
+
 # 加载配置，使上面的配置生效
 $ sysctl -p   
 $ cat /proc/sys/fs/file-max                                                       # 查看系统能够打开文件句柄的最大数量
