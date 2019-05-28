@@ -1,15 +1,21 @@
 #### 一、系统调优配置，修改如下配置，请使用root账号（注意：集群的每个节点都要修改）
 ```bash
+$ ulimit -a                                            # 所有文件描述符详细信息
+
 # 修改 sysctl.conf 配置如下
 $ vi /etc/sysctl.conf
 vm.swappiness=10                                       # 定义内核交换内存页面的积极程度。较高的值会增加攻击性，较低的值会减少交换量。建议使用10来保证交换延迟
-vm.max_map_count=655360                                # 限制进程最大内存映射区域数（控制进程能够打开文件句柄的数量。提供对shell及其启动的进程的可用文件句柄的控制。这是进程级别的）
+vm.max_map_count=655360                                # 限制进程最大内存映射区域数，单个jvm能开启的最大线程数为其一半（控制进程能够打开文件句柄的数量。提供对shell及其启动的进程的可用文件句柄的控制。这是进程级别的）
 fs.file-max=2000000                                    # 系统能够打开文件句柄的数量（系统的限制，并不是针对用户）
 
 # 修改 limits.conf 配置如下
 $ vi /etc/security/limits.conf
-* soft nofile 655350                                   # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符
-* hard nofile 655350                                   # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符
+* soft nofile 655350                                   # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符（注意：不能超过hard nofile）
+* hard nofile 655350                                   # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符（注意：不能超过 fs.nr_open 的值，可使用  sysctl  fs.nr_open 命令查看 fs.nr_open 的值）
+* soft nproc 10240                                     # 最大用户进程数（谨慎修改，这个可以不修改）（查看默认值使用：ulimit -a 命令，找到 max user processes 选项）
+* hard nproc 10240                                     # 最大用户进程数（谨慎修改，这个可以不修改）（查看默认值使用：ulimit -a 命令，找到 max user processes 选项）
+* hard memlock unlimited                               # 最大锁定内存，不限制（谨慎修改，这个可以不修改）（查看默认值使用：ulimit -a 命令，找到 max locked memory 选项）
+* soft memlock unlimited                               # 最大锁定内存，不限制（谨慎修改，这个可以不修改）（查看默认值使用：ulimit -a 命令，找到 max locked memory 选项）
 
 # 修改磁盘调度IO策略
 $ cat /sys/block/sda/queue/scheduler                   # 查看磁盘IO调度策略（方括号里面的是当前选定的调度策略），如果不是noop或deadline，请将其修改成noop或deadline
