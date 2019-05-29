@@ -1,7 +1,5 @@
 #### 一、系统调优配置，修改如下配置，请使用root账号（注意：集群的每个节点都要修改）
 ```bash
-$ ulimit -a                                                  # 查看所有文件句柄数描述信息
-
 # 修改 sysctl.conf 配置如下
 $ vi /etc/sysctl.conf
 vm.swappiness=10                                             # 定义内核交换内存页面的积极程度。较高的值会增加攻击性，较低的值会减少交换量。建议使用10来保证交换延迟
@@ -11,25 +9,11 @@ vm.max_map_count=655360                                      # 限制进程最�
 $ vi /etc/security/limits.conf
 * soft nofile 655350                                         # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符（注意：不能超过hard nofile）
 * hard nofile 655350                                         # 打开文件和网络连接文件描述符。建议将655350设置为文件描述符（注意：不能超过 fs.nr_open 的值，可使用  sysctl  fs.nr_open 命令查看 fs.nr_open 的值）
-* soft nproc 10240                                           # 最大用户进程数（谨慎修改，这个可以不修改）（查看默认值使用：ulimit -a 命令，找到 max user processes 选项）
-* hard nproc 10240                                           # 最大用户进程数（谨慎修改，这个可以不修改）（查看默认值使用：ulimit -a 命令，找到 max user processes 选项）
-* soft memlock unlimited                                     # 最大锁定内存，不限制（谨慎修改，这个可以不修改）（查看默认值使用：ulimit -a 命令，找到 max locked memory 选项）
-* hard memlock unlimited                                     # 最大锁定内存，不限制（谨慎修改，这个可以不修改）（查看默认值使用：ulimit -a 命令，找到 max locked memory 选项）
-
-# 修改磁盘调度IO策略
-$ cat /sys/block/sda/queue/scheduler                         # 查看磁盘IO调度策略（方括号里面的是当前选定的调度策略），如果不是noop或deadline，请将其修改成noop或deadline
-$ vi /etc/default/grub                                       # 找到 GRUB_CMDLINE_LINUX 行，在最后加入 elevator=deadline，比如：GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet elevator=deadline"
-$ grub2-mkconfig -o /boot/grub2/grub.cfg                     # BIOS-Based模式，重建  grub.cfg 配置和磁盘调度IO策略（UEFI-Based模式重建使用：grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg）
-
-# 关闭 numa
-$ dmesg | grep -i numa                                       # 查看 numa 是否关闭
-$ vi /etc/default/grub                                       # 找到 GRUB_CMDLINE_LINUX 行，在最后加入 numa=off，比如：GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet numa=off"
-$ grub2-mkconfig -o /boot/grub2/grub.cfg                     # BIOS-Based模式，重建  grub.cfg 配置和关闭 numa（UEFI-Based模式重建使用：grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg）
 
 # 加载配置，使上面的配置生效
 $ sysctl -p   
 $ ulimit -n                                                  # 查看进程能够打开文件句柄的数量  
-$ shutdown -r now                                            # 重启机器使磁盘调度IO策略生效
+$ shutdown -r now                                            # 重启机器使配置生效
 ```
 #### 二、创建部署用户，集群的每台机器都要创建(Elasticsearch不建议使用root账户部署)
 ```bash
