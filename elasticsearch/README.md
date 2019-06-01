@@ -13,7 +13,7 @@
 中国(1:1){2},(2:2){0,15}     
 ```
 
-#### Elasticsearch和关系型数据库的数据对比
+#### Elasticsearch和关系型数据库的数据对比（注意：ES7规定每一个index只能有一个type，默认叫_doc，在8.x版本会彻底移除type）
 ```bash
 -----------------|-----------------------
     MySQL        |     Elasticsearch    
