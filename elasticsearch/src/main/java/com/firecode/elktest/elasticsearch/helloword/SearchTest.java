@@ -22,6 +22,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.ScoreSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
@@ -199,6 +200,17 @@ public class SearchTest extends ElasticClient {
 		sourceBuilder.from(0);
 		// 每页5条
 		sourceBuilder.size(5);
+		HighlightBuilder highlightBuilder = new HighlightBuilder().field("*").requireFieldMatch(false);
+		/**
+		 * name                属性名称
+         * fragmentSize        将要显示的文本拆成*长的一段来进行显示(设置要显示出来的文本片段的长度，默认是100)
+         * numberOfFragments   可能高亮的文本片段有多个片段，指定显示几个片段
+		 */
+		highlightBuilder.field("name", 150, 3);
+		//设置高亮显示
+		highlightBuilder.preTags("<span style=\"color:red\">");
+		highlightBuilder.postTags("</span>");
+		sourceBuilder.highlighter(highlightBuilder);
 		return sourceBuilder;
 	}
 
