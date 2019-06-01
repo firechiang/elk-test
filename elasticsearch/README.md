@@ -28,6 +28,20 @@
 -----------------|-----------------------
 ```
 
+#### wget爬取数据
+```bash
+# -o                 指定日志文件目录
+# -P                 爬取数据存放目录
+# --no-parent        不向上搜索
+# --no-verbose       只查找比本地文件新的数据
+# -m                 做一个镜像即使拷贝
+# -D                 要爬取的域名列表  
+# -N --convert-links 将爬取的地址转换成存储目录  
+# --random-wait      随机等待  
+# -A                 要爬取的文件       
+wget -o /home/wget-log/wget.log -P /home/elk-data --no-parent --no-verbose -m -D news.cctv.com -N --convert-links --random-wait -A html,HTML,shtml,SHTML http://news.cctv.com
+```
+
 [1]: https://github.com/firechiang/elk-test/tree/master/elasticsearch/docs/windows-single-node.md
 [2]: https://github.com/firechiang/elk-test/tree/master/elasticsearch/docs/setup-single-node.md
 [3]: https://github.com/firechiang/elk-test/tree/master/elasticsearch/docs/setup-cluster-node.md

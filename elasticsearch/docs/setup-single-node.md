@@ -34,8 +34,16 @@ $ cd /home/tools
 $ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.1.0-linux-x86_64.tar.gz
 $ tar -zxvf elasticsearch-7.1.0-linux-x86_64.tar.gz -C ../           
 ```
+#### 四、配置IK中文分词器（注意：IK分词器需对应Elasticsearch版本，否则Elasticsearch将无法启动，如果版本不对应可以修改IK分词器plugin-descriptor.properties配置文件里面的Elasticsearch版本号）
+```bash
+$ sudo yum install -y unzip zip                              # 安装zip文件解压工具                         
+$ wget -P /home/tools/ik https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.1.0/elasticsearch-analysis-ik-7.1.0.zip
+$ cd /home/tools/ik
+$ unzip ./elasticsearch-analysis-ik-7.1.0.zip -d ./          # 解压到当前目录
+$ scp -r /home/tools/ik /home/elasticsearch-7.1.0/plugins    # 将IK中文分词器插件拷贝到Elasticsearch插件目录
+```
 
-#### 四、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]配置文件
+#### 五、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]配置文件
 ```bash
 http.port: 9200                                        # http 通信端口
 transport.tcp.port: 9400                               # 集群内部通信端口
@@ -51,7 +59,7 @@ cluster.initial_master_nodes: ["node01"]               # 初始化集群参选�
 xpack.security.enabled: true                           # 是否开启安全验证(配置项里面没有，需手动添加)
 ```
 
-#### 五、配置环境变量[vi ~/.bashrc]在末尾添加如下内容
+#### 六、配置环境变量[vi ~/.bashrc]在末尾添加如下内容
 ```bash
 export ELASTICSEARCH_HOME=/home/elasticsearch-7.1.0
 PATH=$PATH:$ELASTICSEARCH_HOME/bin                     # linux以 : 号隔开，windows以 ; 号隔开
@@ -60,7 +68,7 @@ $ source ~/.bashrc                                     # （系统重读配置�
 $ echo $ELASTICSEARCH_HOME
 ```
 
-#### 六、启动Elasticsearch（单个节点信息：http://192.168.229.133:9200）
+#### 七、启动Elasticsearch（单个节点信息：http://192.168.229.133:9200）
 ```bash
 $ elasticsearch                                        # 前台启动 Elasticsearch 节点（建议测试使用，因为前台显示日志）
 $ elasticsearch -d                                     # 后台启动 Elasticsearch 节点（建议生产使用）
@@ -68,7 +76,7 @@ $ elasticsearch -d                                     # 后台启动 Elasticsea
 $ kill -SIGTERM 15455                                  # 正常停止 Elasticsearch 节点
 ```
 
-#### 七、配置访问密码，Elasticsearch默认已经把账号设置好了，我们只需要配置密码即可，密码最低长度6位数
+#### 八、配置访问密码，Elasticsearch默认已经把账号设置好了，我们只需要配置密码即可，密码最低长度6位数
 ```bash
 $ elasticsearch-setup-passwords interactive
 

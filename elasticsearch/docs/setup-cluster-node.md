@@ -35,7 +35,16 @@ $ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.1.0-
 $ tar -zxvf elasticsearch-7.1.0-linux-x86_64.tar.gz -C ../   # 解压到上层目录       
 ```
 
-#### 四、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]配置文件
+#### 四、配置IK中文分词器（注意：IK分词器需对应Elasticsearch版本，否则Elasticsearch将无法启动，如果版本不对应可以修改IK分词器plugin-descriptor.properties配置文件里面的Elasticsearch版本号）
+```bash
+$ sudo yum install -y unzip zip                              # 安装zip文件解压工具                         
+$ wget -P /home/tools/ik https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.1.0/elasticsearch-analysis-ik-7.1.0.zip
+$ cd /home/tools/ik
+$ unzip ./elasticsearch-analysis-ik-7.1.0.zip -d ./          # 解压到当前目录
+$ scp -r /home/tools/ik /home/elasticsearch-7.1.0/plugins    # 将IK中文分词器插件拷贝到Elasticsearch插件目录
+```
+
+#### 五、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]配置文件
 ```bash
 cluster.name: myElasticsearch                                # 集群名称
 http.port: 9200                                              # http 通信端口
@@ -51,19 +60,19 @@ gateway.recover_after_nodes: 3                               # 网关控制在n�
 xpack.security.enabled: true                                 # 是否开启安全验证(配置项里面没有，需手动添加)
 ```
 
-#### 五、分发安装文件到集群各个节点
+#### 六、分发安装文件到集群各个节点
 ```bash
 $ scp -r /home/elasticsearch-7.1.0 elk-admin@server002:/home
 $ scp -r /home/elasticsearch-7.1.0 elk-admin@server003:/home
 ```
 
-#### 六、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]集群各个节点的名称和服务绑定地址
+#### 七、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]集群各个节点的名称和服务绑定地址
 ```bash
 node.name: node01                                            # 节点名称（集群唯一）
 network.host: server001                                      # 服务绑定地址（修改为各个节点的主机名或IP）
 ```
 
-#### 七、配置集群各个节点上的环境变量[vi ~/.bashrc]在末尾添加如下内容
+#### 八、配置集群各个节点上的环境变量[vi ~/.bashrc]在末尾添加如下内容
 ```bash
 export ELASTICSEARCH_HOME=/home/elasticsearch-7.1.0
 PATH=$PATH:$ELASTICSEARCH_HOME/bin                           # linux以 : 号隔开，windows以 ; 号隔开
@@ -72,7 +81,7 @@ $ source ~/.bashrc                                           # （系统重读�
 $ echo $ELASTICSEARCH_HOME
 ```
 
-#### 八、启动集群各个节点上的Elasticsearch（单个节点信息：http://192.168.229.133:9200）
+#### 九、启动集群各个节点上的Elasticsearch（单个节点信息：http://192.168.229.133:9200）
 ```bash
 $ elasticsearch                                              # 前台启动 Elasticsearch 节点（建议测试使用，因为前台显示日志）
 $ elasticsearch -d                                           # 后台启动 Elasticsearch 节点（建议生产使用）
@@ -80,7 +89,7 @@ $ elasticsearch -d                                           # 后台启动 Elas
 $ kill -SIGTERM 15455                                        # 正常停止 Elasticsearch 节点
 ```
 
-#### 九、配置集群访问密码，Elasticsearch默认已经把账号设置好了，我们只需要配置密码即可，密码最低长度6位数（到集群任意节点执行命令）
+#### 十、配置集群访问密码，Elasticsearch默认已经把账号设置好了，我们只需要配置密码即可，密码最低长度6位数（到集群任意节点执行命令）
 ```bash
 $ elasticsearch-setup-passwords interactive
 

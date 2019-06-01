@@ -14,12 +14,21 @@ discovery.seed_hosts: ["localhost"]                          # 种子节点列�
 cluster.initial_master_nodes: ["node01"]                     # 初始化集群参选主节点名称列表，如果是新加节点到旧的集群好像不能写自己（注意：这里填的是名称，就是配置项 node.name 的值）
 xpack.security.enabled: true                                 # 是否开启安全验证(配置项里面没有，需手动添加)
 ```
-#### 三、启动Elasticsearch（单个节点信息：http://192.168.229.133:9200）
+#### 三、配置IK中文分词器（注意：IK分词器需对应Elasticsearch版本，否则Elasticsearch将无法启动，如果版本不对应可以修改IK分词器plugin-descriptor.properties配置文件里面的Elasticsearch版本号）
+```bash
+$ sudo yum install -y unzip zip                              # 安装zip文件解压工具                         
+$ wget -P /home/tools/ik https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.1.0/elasticsearch-analysis-ik-7.1.0.zip
+$ cd /home/tools/ik
+$ unzip ./elasticsearch-analysis-ik-7.1.0.zip -d ./          # 解压到当前目录
+$ scp -r /home/tools/ik /home/elasticsearch-7.1.0/plugins    # 将IK中文分词器插件拷贝到Elasticsearch插件目录
+```
+
+#### 四、启动Elasticsearch（单个节点信息：http://192.168.229.133:9200）
 ```bash
 $ elasticsearch.bat                                          # 启动 Elasticsearch
 ```
 
-#### 四、配置访问密码，Elasticsearch默认已经把账号设置好了，我们只需要配置密码即可，密码最低长度6位数
+#### 五、配置访问密码，Elasticsearch默认已经把账号设置好了，我们只需要配置密码即可，密码最低长度6位数
 ```bash
 $ elasticsearch-setup-passwords.bat interactive
 
