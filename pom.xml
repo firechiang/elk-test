@@ -45,6 +45,9 @@
 
 	<modules>
 		<module>elasticsearch</module>
+		<module>kibana</module>
+		<module>logstash</module>
+		<module>beats</module>
 	</modules>
-	
+
 </project>
