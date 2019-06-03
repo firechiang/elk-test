@@ -2,7 +2,7 @@
 #### [二、Centos 单机搭建][2]
 #### [三、Centos 集群搭建][3]
 #### [四、Rest 接口使用][4]
-#### [五、索引生命周期，可到：kibana > 管理 > 索引生命周期策略，界面创建](https://www.elastic.co/guide/en/elasticsearch/reference/7.1/getting-started-index-lifecycle-management.html)
+#### [五、索引生命周期使用，可到：kibana > 管理 > 索引生命周期策略，界面创建](https://www.elastic.co/guide/en/elasticsearch/reference/7.1/getting-started-index-lifecycle-management.html)
 #### Elasticsearch核心基于Lucene的倒排索引（注意：倒排索引只在field上创建）
 ```bash
 # 数据示例(注：后面跟的是行号)
