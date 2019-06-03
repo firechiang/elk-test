@@ -57,13 +57,13 @@ setup.ilm:
 
 #### 四、Filebeat 简单使用
 ```bash
-$ ./filebeat --help                              # 查看 Filebeat 命令使用帮助
-# -e                                   前台启动，日志打印在控制台，不会打印到日志文件
-# -c filebeat.yml                      指定配置文件启动，默认指定配置文件目录下的 filebeat.yml 文件
-# -d "publish"                         启用某些调试选择器
-# -E output.logstash.enabled=false     启动时指定配置项的值，可以写多个 -E，每一个指定一个配置项 
-$ ./filebeat -e -c filebeat.yml -d "publish"     # 启动   Filebeat（建议测试使用）  
-$ ./filebeat -c filebeat.yml &                   # 启动   Filebeat（建议生产使用）
+$ ./filebeat --help                            # 查看 Filebeat 命令使用帮助
+# -e                                           # 前台启动，日志打印在控制台，不会打印到日志文件
+# -c filebeat.yml                              # 指定配置文件启动，默认指定配置文件目录下的 filebeat.yml 文件
+# -d "publish"                                 # 启用某些调试选择器
+# -E output.logstash.enabled=false             # 启动时指定配置项的值，可以写多个 -E，每一个指定一个配置项 
+$ ./filebeat -e -c filebeat.yml -d "publish"   # 启动   Filebeat（建议测试使用）  
+$ ./filebeat -c filebeat.yml &                 # 启动   Filebeat（建议生产使用）
 
 # 启动时指定配置信息
 $ ./filebeat setup --template -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]'
