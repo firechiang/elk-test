@@ -21,14 +21,6 @@
 		<junit.version>4.10</junit.version>
 	</properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-		</dependency>
-	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -48,6 +40,7 @@
 		<module>kibana</module>
 		<module>logstash</module>
 		<module>beats</module>
+		<module>biz</module>
 	</modules>
 
 </project>

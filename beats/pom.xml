@@ -11,5 +11,10 @@
 	<artifactId>beats</artifactId>
 	<name>beats</name>
 	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+		</dependency>
 	</dependencies>
 </project>

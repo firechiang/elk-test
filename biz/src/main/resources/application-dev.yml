@@ -1,0 +1,6 @@
+spring:
+  devtools:
+    restart: 
+      enabled: true           # 开启热部署
+  thymeleaf:
+    cache: false              # 去除模板引擎缓存，因为我们开启了热部署

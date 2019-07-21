@@ -1,0 +1,42 @@
+server:
+  port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    context-path: /elk-biz
+spring:
+  profiles:
+    active:
+      - dev
+  # JSON相关配置
+  jackson:
+    locale: zh_CN
+  # 数据源相关配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.229.133:3306/elk_biz?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: Jiang@123
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      auto-commit: true
+      # 测试连接是否有效的查询语句
+      connection-test-query: select 1
+  # JPA相关配置  
+  jpa:
+    database: mysql
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  # 模板引擎相关配置    
+  thymeleaf:
+    enable-spring-el-compiler: true
+    mode: HTML
+    suffix: .html
+    prefix: classpath:/templates/
+# 日志级别相关      
+logging:
+  level:
+    com.firecode.elktest.biz.dao: debug
+    org.hibernate.SQL: debug
