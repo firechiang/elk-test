@@ -1,4 +1,8 @@
 server:
+  # 禁用 Spring 生成404等错误信息，返回到前台
+  error:
+    whitelabel:
+      enabled: false
   port: 8080
   tomcat:
     uri-encoding: UTF-8
@@ -32,9 +36,17 @@ spring:
   # 模板引擎相关配置    
   thymeleaf:
     enable-spring-el-compiler: true
+    encoding: UTF-8
     mode: HTML
     suffix: .html
     prefix: classpath:/templates/
+# 阿里云短信服务相关配置    
+aliyun:
+  sms:
+    accessKey: LTAISjYxxr5qLmio
+    accessKeySecret: pkqEMJIcVQV8G5fkNEQNDQV7rsntKV
+    template:
+      code: SMS_95590008    
 # 日志级别相关      
 logging:
   level:

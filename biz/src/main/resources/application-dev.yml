@@ -1,6 +1,7 @@
 spring:
   devtools:
     restart: 
-      enabled: true           # 开启热部署
+      enabled: true                   # 开启热部署
+      exclude: templates/**,static/** # 过滤掉不需要热加载的文件   
   thymeleaf:
-    cache: false              # 去除模板引擎缓存，因为我们开启了热部署
+    cache: false                      # 去除模板引擎缓存，因为我们开启了热部署
