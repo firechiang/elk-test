@@ -111,6 +111,9 @@ function drawRegion(map, regionList) {
             })
         })(textContent);
 
+        /**
+         * 监听鼠标滑过地址位置范围事件
+         */
         textLabel.addEventListener('mouseover', function (event) {
             var label = event.target;
             var boundaries = polygonContext[label.getContent()];
@@ -121,6 +124,9 @@ function drawRegion(map, regionList) {
             }
         });
 
+        /**
+         * 监听鼠标移出地址位置范围事件
+         */
         textLabel.addEventListener('mouseout', function (event) {
             var label = event.target;
             var boundaries = polygonContext[label.getContent()];
@@ -131,6 +137,9 @@ function drawRegion(map, regionList) {
             }
         });
 
+        /**
+         * 监听鼠标点击地址位置范围事件
+         */
         textLabel.addEventListener('click', function (event) {
             var label = event.target;
             var map = label.getMap();

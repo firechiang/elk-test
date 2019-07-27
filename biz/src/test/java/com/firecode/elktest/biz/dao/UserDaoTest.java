@@ -9,7 +9,7 @@ import com.firecode.elktest.biz.domain.User;
 public class UserDaoTest extends BasicTest {
 	
 	@Autowired
-	private UserDao userDao;
+	private UserRepository userDao;
 	
 	@Test
 	public void findByID(){

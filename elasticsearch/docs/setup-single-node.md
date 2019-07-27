@@ -46,17 +46,11 @@ $ scp -r /home/tools/ik /home/elasticsearch-7.1.0/plugins    # 将IK中文分词
 #### 五、修改[vi /home/elasticsearch-7.1.0/config/elasticsearch.yml]配置文件
 ```bash
 http.port: 9200                                        # http 通信端口
-transport.tcp.port: 9400                               # 集群内部通信端口
-#指定该节点是否有资格被选举成为master节点，默认是true，es是默认集群中的第一台机器为master，如果这台机挂了就会重新选举master
-node.master: true
-node.data: true                                        # 允许该节点存储数据(默认开启)
-node.name: node01                                      # 节点名称
+transport.tcp.port: 9400                               # 服务访问端口（注意：Spring Data连接的就是这个端口）
 network.host: server001                                # 服务绑定地址
 path.data: /home/elasticsearch-7.1.0/data              # 数据存储目录(注意：手动创建目录)
 path.logs: /home/elasticsearch-7.1.0/logs              # 日志存储目录 (注意：手动创建目录)
-discovery.seed_hosts: ["server001"]                    # 种子节点列表（注意：填写IP或主机名）
-cluster.initial_master_nodes: ["node01"]               # 初始化集群参选主节点名称列表，如果是新加节点到旧的集群好像不能写自己（注意：这里填的是名称，就是配置项 node.name 的值）
-xpack.security.enabled: true                           # 是否开启安全验证(配置项里面没有，需手动添加)
+xpack.security.enabled: true                           # 如果要配置密码的话，就开启安全验证(配置项里面没有，需手动添加)
 ```
 
 #### 六、配置环境变量[vi ~/.bashrc]在末尾添加如下内容

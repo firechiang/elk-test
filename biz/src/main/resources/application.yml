@@ -6,8 +6,8 @@ server:
   port: 8080
   tomcat:
     uri-encoding: UTF-8
-  servlet:
-    context-path: /elk-biz
+  #servlet:
+    #context-path: /elk-biz
 spring:
   profiles:
     active:
@@ -26,6 +26,15 @@ spring:
       auto-commit: true
       # 测试连接是否有效的查询语句
       connection-test-query: select 1
+  # Redis相关配置    
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    timeout: 3000
+    jedis:
+      pool:
+        min-idle: 1    
   # JPA相关配置  
   jpa:
     database: mysql
@@ -33,6 +42,26 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+  # Kafka相关配置    
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: xunwu    
+  # Elasticsearch相关配置    
+  data:
+    elasticsearch:
+      cluster-nodes: localhost:9400
+      repositories:
+        enabled: true        
+  # 邮件发送相关配置     
+  mail:
+    host: smtp.163.com
+    username: flyzfq@163.com
+    password: wali123
+    properties:
+      mail:
+        smtp:
+          auth: true
   # 模板引擎相关配置    
   thymeleaf:
     enable-spring-el-compiler: true
@@ -40,15 +69,31 @@ spring:
     mode: HTML
     suffix: .html
     prefix: classpath:/templates/
+  # 文件上传相关配置 
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 20MB
+      max-file-size: 5MB
+      location: D:\temp\images
 # 阿里云短信服务相关配置    
 aliyun:
   sms:
     accessKey: LTAISjYxxr5qLmio
     accessKeySecret: pkqEMJIcVQV8G5fkNEQNDQV7rsntKV
     template:
-      code: SMS_95590008    
+      code: SMS_95590008 
+# 七牛云相关配置      
+qiniu:
+  AccessKey: GVD-MVQEoOiJOt7yNBDo-JrOKWHB33eZN2JmDFC6
+  SecretKey: sHnl57ZXtStejn7GgY5VF3lnm1CxMJ3hcayexAWz
+  Bucket: lakers
+  cdn:
+    prefix: http://7xo6gy.com1.z0.glb.clouddn.com/
 # 日志级别相关      
 logging:
   level:
     com.firecode.elktest.biz.dao: debug
     org.hibernate.SQL: debug
+# 开启全局debug日志    
+#debug: true

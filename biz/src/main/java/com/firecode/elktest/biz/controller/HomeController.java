@@ -1,4 +1,4 @@
-package com.firecode.elktest.biz.common;
+package com.firecode.elktest.biz.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,12 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.firecode.elktest.biz.common.ApiResponse;
+import com.firecode.elktest.biz.common.LoginUserUtil;
 import com.firecode.elktest.biz.service.ISmsService;
 import com.firecode.elktest.biz.service.ServiceResult;
 
 
 @Controller
 public class HomeController {
+	
     private final ISmsService smsService;
 
     @Autowired

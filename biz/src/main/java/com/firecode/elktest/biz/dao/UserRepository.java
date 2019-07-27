@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import com.firecode.elktest.biz.domain.User;
 
 
-public interface UserDao extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByName(String userName);
 

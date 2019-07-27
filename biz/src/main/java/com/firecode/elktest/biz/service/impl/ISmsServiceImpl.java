@@ -27,7 +27,7 @@ import com.firecode.elktest.biz.service.ServiceResult;
  */
 @Slf4j
 @Service
-public class SmsServiceImpl implements ISmsService, InitializingBean {
+public class ISmsServiceImpl implements ISmsService, InitializingBean {
     @Value("${aliyun.sms.accessKey}")
     private String accessKey;
     @Value("${aliyun.sms.accessKeySecret}")
@@ -41,7 +41,7 @@ public class SmsServiceImpl implements ISmsService, InitializingBean {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Autowired
-    public SmsServiceImpl(RedisTemplate<String, String> redisTemplate) {
+    public ISmsServiceImpl(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
