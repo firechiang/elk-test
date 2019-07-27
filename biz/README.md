@@ -5,7 +5,7 @@ springboot，lombok，mysql，redis，kafka，elasticsearch，thymeleaf，spring
 用户入口 http://localhost:8080/user/center 帐号密码都是admin
 管理员入口 http://localhost:8080/admin/center 帐号密码都是admin
 ```
-#### 三、下载Windows版Elacticsearch-6.8.0(https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.8.0.zip)和修改[vi elasticsearch-6.8.0/config/elasticsearch.yml]配置文件
+#### 三、[下载Windows版Elacticsearch-6.8.0](https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.8.0.zip)和修改[vi elasticsearch-6.8.0/config/elasticsearch.yml]配置文件
 ```bash
 network.host: 0.0.0.0                                      # 服务绑定地址
 http.port: 9200                                            # http 通信端口
@@ -14,7 +14,7 @@ transport.tcp.port: 9400                                   # 服务访问端口�
 path.data: D:\elasticsearch-6.8.0\data                     # 数据存储目录(注意：手动创建目录)
 path.logs: D:\elasticsearch-6.8.0\logs                     # 日志存储目录 (注意：手动创建目录)
 ```
-#### 四、下载(https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v6.8.0/elasticsearch-analysis-ik-6.8.0.zip)和配置IK中文分词器（注意：IK分词器需对应Elasticsearch版本，否则Elasticsearch将无法启动，如果版本不对应可以修改IK分词器plugin-descriptor.properties配置文件里面的Elasticsearch版本号）
+#### 四、[下载](https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v6.8.0/elasticsearch-analysis-ik-6.8.0.zip)和配置IK中文分词器（注意：IK分词器需对应Elasticsearch版本，否则Elasticsearch将无法启动，如果版本不对应可以修改IK分词器plugin-descriptor.properties配置文件里面的Elasticsearch版本号）
 ```bash
 $ sudo yum install -y unzip zip                            # 安装zip文件解压工具                         
 $ wget -P /home/tools/ik https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v6.8.0/elasticsearch-analysis-ik-6.8.0.zip
