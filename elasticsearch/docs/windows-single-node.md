@@ -6,7 +6,7 @@ transport.tcp.port: 9400                                  # 服务访问端口�
 network.host: server001                                   # 服务绑定地址
 path.data: D:\elasticsearch-7.1.0\data                    # 数据存储目录(注意：手动创建目录)
 path.logs: D:\elasticsearch-7.1.0\data                    # 日志存储目录 (注意：手动创建目录)
-#discovery.type: single-node                  # 单节点模式（不建议配置，因为以后可能要做集群）
+#discovery.type: single-node                              # 单节点模式（不建议配置，因为以后可能要做集群）
 xpack.security.enabled: true                              # 如果要配置密码的话，就开启安全验证(配置项里面没有，需手动添加)
 ```
 #### 三、配置IK中文分词器（注意：IK分词器需对应Elasticsearch版本，否则Elasticsearch将无法启动，如果版本不对应可以修改IK分词器plugin-descriptor.properties配置文件里面的Elasticsearch版本号）
