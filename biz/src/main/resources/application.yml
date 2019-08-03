@@ -15,6 +15,7 @@ spring:
   # JSON相关配置
   jackson:
     locale: zh_CN
+    default-property-inclusion: non-null
   # 数据源相关配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
