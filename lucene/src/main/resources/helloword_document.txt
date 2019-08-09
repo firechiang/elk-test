@@ -1,0 +1,5 @@
+reuse TokenStream for a previous instance of this field <b>name</b>. This allows
+custom field types (like StringField and NumericField) that do not use
+the analyzer to still have good performance. Note: the passed-in type
+may be inappropriate, for example if you mix up different types of Fields
+for the same field name. So it's the responsibility of the implementation to check
