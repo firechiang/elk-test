@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -17,42 +15,31 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSLockFactory;
-import org.apache.lucene.store.NIOFSDirectory;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+
+import com.firecode.elktest.lucene.BaseDirectory;
 
 /**
  * 查询文档相关操作简单使用
  * 
  * @author JIANG
  */
-public class AddDocumentTest {
+public class AddDocumentTest extends BaseDirectory {
 
 	/**
 	 * 索引写入对象
 	 */
 	private IndexWriter indexWriter;
-	/**
-	 * 索引目录
-	 */
-	private Directory directory;
 	
-	private boolean create = false;
-
-	@Before
-	public void init() throws IOException {
-		// 创建索引目录
-		getDirectory();
+	public void before() throws IOException {
 		/**
 		 * 索引写入相关配置
 		 * @param analyzer 分词器
 		 *            
 		 */
 		IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
-		if (create) {
+		if (exists) {
 			// 在目录中创建新索引，删除以前的索引
 			config.setOpenMode(OpenMode.CREATE);
 		} else {
@@ -61,37 +48,7 @@ public class AddDocumentTest {
 		}
 		this.indexWriter = new IndexWriter(directory, config);
 	}
-
-	/**
-	 * 获取索引目录
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	public void getDirectory() throws IOException {
-		Path path = Paths.get("d:\\lucene\\data", "project");
-		// 如果数据目录已存在，直接返回索引目录
-		if (Files.exists(path)) {
-            this.create = true;
-		}
-		/**
-		 * 创建内存级索引目录
-		 * 
-		 * @param path         数据落地磁盘的路劲或文件
-		 * @param lockFactory  锁工厂
-		 * @param maxChunkSize 单个数据文件最大大小
-		 *            
-		 */
-		//this.directory  = MMapDirectory.open(path, FSLockFactory.getDefault(), MMapDirectory.DEFAULT_MAX_CHUNK_SIZE);
-		/**
-		 * 创建磁盘级索引
-		 * 
-		 * @param path         数据落地磁盘的路劲或文件
-		 * @param lockFactory  锁工厂
-		 */
-		this.directory = NIOFSDirectory.open(path, FSLockFactory.getDefault());
-	}
-
+	
 	/**
 	 * 添加文档
 	 * 
@@ -139,6 +96,7 @@ public class AddDocumentTest {
 	@After
 	public void close() throws IOException {
 		this.indexWriter.close();
+		super.close();
 	}
 
 }

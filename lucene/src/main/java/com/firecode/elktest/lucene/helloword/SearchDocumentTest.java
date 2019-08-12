@@ -1,9 +1,6 @@
 package com.firecode.elktest.lucene.helloword;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -18,42 +15,30 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSLockFactory;
-import org.apache.lucene.store.NIOFSDirectory;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+
+import com.firecode.elktest.lucene.BaseDirectory;
 
 /**
  * 索引相关操作简单使用
  * 
  * @author JIANG
  */
-public class SearchDocumentTest {
+public class SearchDocumentTest extends BaseDirectory {
 
 	/**
 	 * 读取索引目录对象
 	 */
 	private IndexReader reader;
-	/**
-	 * 索引目录
-	 */
-	private Directory directory;
-	
-	private boolean create = false;
 
-	@Before
-	public void init() throws IOException {
-		// 创建索引目录
-		getDirectory();
+	public void before() throws IOException {
 		/**
 		 * 索引写入相关配置
 		 * @param analyzer 分词器
-		 *            
 		 */
 		IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
-		if (create) {
+		if (exists) {
 			// 在目录中创建新索引，删除以前的索引
 			config.setOpenMode(OpenMode.CREATE);
 		} else {
@@ -65,36 +50,6 @@ public class SearchDocumentTest {
 	}
 
 	/**
-	 * 获取索引目录
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	public void getDirectory() throws IOException {
-		Path path = Paths.get("d:\\lucene\\data", "project");
-		// 如果数据目录已存在，直接返回索引目录
-		if (Files.exists(path)) {
-            this.create = true;
-		}
-		/**
-		 * 创建内存级索引目录
-		 * 
-		 * @param path         数据落地磁盘的路劲或文件
-		 * @param lockFactory  锁工厂
-		 * @param maxChunkSize 单个数据文件最大大小
-		 *            
-		 */
-		//this.directory  = MMapDirectory.open(path, FSLockFactory.getDefault(), MMapDirectory.DEFAULT_MAX_CHUNK_SIZE);
-		/**
-		 * 创建磁盘级索引
-		 * 
-		 * @param path         数据落地磁盘的路劲或文件
-		 * @param lockFactory  锁工厂
-		 */
-		this.directory = NIOFSDirectory.open(path, FSLockFactory.getDefault());
-	}
-
-	/**
 	 * 查询文档
 	 * 
 	 * @throws IOException
@@ -102,6 +57,8 @@ public class SearchDocumentTest {
 	 */
 	@Test
 	public void searchDocument() throws IOException, ParseException {
+		System.err.println("文档总数量："+reader.maxDoc());
+		System.err.println("存储的文档数："+reader.numDocs());
 		// 构建索引查询对象
 		IndexSearcher searcher = new IndexSearcher(reader);
 		// 分词器
@@ -137,6 +94,6 @@ public class SearchDocumentTest {
 	@After
 	public void close() throws IOException {
 		this.reader.close();
+		super.close();
 	}
-
 }
