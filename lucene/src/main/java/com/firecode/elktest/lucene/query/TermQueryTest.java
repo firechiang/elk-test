@@ -1,19 +1,18 @@
-package com.firecode.elktest.lucene.helloword;
+package com.firecode.elktest.lucene.query;
 
 import java.io.IOException;
 
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.junit.After;
 import org.junit.Test;
@@ -21,12 +20,12 @@ import org.junit.Test;
 import com.firecode.elktest.lucene.BaseDirectory;
 
 /**
- * 查询文档相关操作
+ * TermQuery查询简单使用（注意：这是精确查询）
  * 
  * @author JIANG
  */
-public class SearchDocumentTest extends BaseDirectory {
-
+public class TermQueryTest extends BaseDirectory {
+	
 	/**
 	 * 读取索引目录对象
 	 */
@@ -57,21 +56,15 @@ public class SearchDocumentTest extends BaseDirectory {
 	 */
 	@Test
 	public void searchDocument() throws IOException, ParseException {
+		
 		System.err.println("文档总数量："+reader.maxDoc());
 		System.err.println("存储的文档数："+reader.numDocs());
 		// 构建索引查询对象
 		IndexSearcher searcher = new IndexSearcher(reader);
-		// 分词器
-		Analyzer analyzer = new StandardAnalyzer();
 		/**
-		 * 构建查询解析器
-		 * 
-		 * @param fieldName 要匹配文档里面的哪个字段
-		 * @param analyzer  分词器
+		 * 查询name等于maomao的所有文档
 		 */
-		QueryParser parser = new QueryParser("name", analyzer);
-		// 查询内容包含 maomao 的文档
-		Query query = parser.parse("maomao");
+		TermQuery query = new TermQuery(new Term("name", "maomao"));
 		/**
 		 * 查询文档
 		 * 
@@ -95,4 +88,6 @@ public class SearchDocumentTest extends BaseDirectory {
 		this.reader.close();
 		super.close();
 	}
+	
+	
 }
