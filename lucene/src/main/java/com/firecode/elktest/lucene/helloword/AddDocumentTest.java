@@ -10,6 +10,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.NumericDocValuesField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
@@ -87,9 +88,11 @@ public class AddDocumentTest extends BaseDirectory {
 		Field field1 = new Field("content", content,fieldType);
 		Field field2 = new StringField("name", "maomao", Store.YES);
 		Field field3 = new StringField("age", "31", Store.YES);
+		Field field4 = new NumericDocValuesField("age1", 31L);
 		document.add(field1);
 		document.add(field2);
 		document.add(field3);
+		document.add(field4);
 		// 建立索引
 		indexWriter.addDocument(document);
 	}
