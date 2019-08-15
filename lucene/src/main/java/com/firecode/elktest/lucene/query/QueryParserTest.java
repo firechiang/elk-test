@@ -16,7 +16,8 @@ import org.apache.lucene.search.TopDocs;
 import com.firecode.elktest.lucene.IndexSearchers;
 
 /**
- * 通用查询
+ * QueryParser通用查询
+ * 注意：QueryParser实际是将表达式解析成对应的Query
  * @author JIANG
  */
 public class QueryParserTest {
