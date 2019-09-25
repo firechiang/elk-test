@@ -1,9 +1,6 @@
 package com.firecode.elktest.lucene.helloword;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -14,6 +11,7 @@ import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.After;
 import org.junit.Test;
@@ -21,11 +19,11 @@ import org.junit.Test;
 import com.firecode.elktest.lucene.BaseDirectory;
 
 /**
- * 添加文档相关操作
+ * 修改文档相关操作
  * 
  * @author JIANG
  */
-public class AddDocumentTest extends BaseDirectory {
+public class UpdateDocumentTest extends BaseDirectory {
 
 	/**
 	 * 索引写入对象
@@ -56,10 +54,8 @@ public class AddDocumentTest extends BaseDirectory {
 	 * @throws ParseException
 	 */
 	@Test
-	public void addDocument() throws IOException, ParseException {
-		String filePath = Thread.currentThread().getContextClassLoader().getResource("helloword_document.txt").getPath();
-		byte[] readAllBytes = Files.readAllBytes(new File(filePath).toPath());
-		String content = new String(readAllBytes, StandardCharsets.UTF_8);
+	public void updateDocument() throws IOException, ParseException {
+		
 		// 文档对象
 		Document document = new Document();
 		FieldType fieldType = new FieldType();
@@ -83,14 +79,17 @@ public class AddDocumentTest extends BaseDirectory {
 		 * @param value 属性值
 		 * @param type  属性类型（Store.YES=数据被索引，并且存储到文件当中；Store.NO=数据被索引，但不存储到文件当中）
 		 */
-		Field field1 = new StringField("content", content, Store.YES);
+		Field field1 = new StringField("content", "aaaaaa", Store.YES);
 		Field field2 = new StringField("name", "maomao", Store.YES);
-		Field field3 = new StringField("age", "31", Store.YES);
+		Field field3 = new StringField("age", "32", Store.YES);
 		document.add(field1);
 		document.add(field2);
 		document.add(field3);
-		// 建立索引
-		indexWriter.addDocument(document);
+		/**
+		 * 修改name=maomao的文档
+		 * 注意：Lucene其实是先将文档删除，再添加
+		 */
+		indexWriter.updateDocument(new Term("name","maomao"), document);
 	}
 
 	@After

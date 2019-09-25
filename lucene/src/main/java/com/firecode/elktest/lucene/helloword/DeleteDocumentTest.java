@@ -4,38 +4,35 @@ import java.io.IOException;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
 import org.junit.After;
 import org.junit.Test;
 
 import com.firecode.elktest.lucene.BaseDirectory;
 
 /**
- * 查询文档相关操作
+ * 删除文档相关操作
  * 
  * @author JIANG
  */
-public class SearchDocumentTest extends BaseDirectory {
+public class DeleteDocumentTest extends BaseDirectory {
 
 	/**
-	 * 读取索引目录对象
+	 * 索引写入对象
 	 */
-	private IndexReader reader;
-
+	private IndexWriter indexWriter;
+	
 	public void before() throws IOException {
 		/**
 		 * 索引写入相关配置
 		 * @param analyzer 分词器
+		 *            
 		 */
 		IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
 		if (exists) {
@@ -45,22 +42,17 @@ public class SearchDocumentTest extends BaseDirectory {
 			// 将新文档添加到现有索引:
 			config.setOpenMode(OpenMode.CREATE_OR_APPEND);
 		}
-		// 读取索引目录对象
-		this.reader = DirectoryReader.open(directory);
+		this.indexWriter = new IndexWriter(directory, config);
 	}
-
+	
 	/**
-	 * 查询文档
+	 * 根据Query（查询）删除文档
 	 * 
 	 * @throws IOException
 	 * @throws ParseException
 	 */
 	@Test
-	public void searchDocument() throws IOException, ParseException {
-		System.err.println("文档总数量："+reader.maxDoc());
-		System.err.println("存储的文档数："+reader.numDocs());
-		// 构建索引查询对象
-		IndexSearcher searcher = new IndexSearcher(reader);
+	public void deleteDocumentByQuery() throws IOException, ParseException {
 		// 分词器
 		Analyzer analyzer = new StandardAnalyzer();
 		/**
@@ -68,31 +60,36 @@ public class SearchDocumentTest extends BaseDirectory {
 		 * 
 		 * @param fieldName 要匹配文档里面的哪个字段
 		 * @param analyzer  分词器
+		 *           
 		 */
 		QueryParser parser = new QueryParser("name", analyzer);
 		// 查询内容包含 previous 的文档
 		Query query = parser.parse("maomao");
+		
+		long deleteDocuments = indexWriter.deleteDocuments(query);
+		System.err.println("删除数量："+deleteDocuments);
+	}
+	
+	/**
+	 * 根据Term（属性值）删除文档
+	 * 
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	@Test
+	public void deleteDocumentByTerm() throws IOException, ParseException {
 		/**
-		 * 查询文档
-		 * 
-		 * @param query 查询对象
-		 * @param topN  取几条
-		 *            
+		 * 删除name等于maomao的所有文档
 		 */
-		TopDocs tds = searcher.search(query, 10);
-		// 所有文档的评分对象
-		ScoreDoc[] scoreDocs = tds.scoreDocs;
-		for (ScoreDoc sd : scoreDocs) {
-			// 根据ID获取文档
-			Document doc = searcher.doc(sd.doc);
-			// 获取文档的属性值
-			System.err.println("name："+doc.get("name")+"，age："+doc.get("age"));
-		}
+		Term term = new Term("name","maomao");
+		long deleteDocuments = indexWriter.deleteDocuments(term);
+		System.err.println("删除数量："+deleteDocuments);
 	}
 
 	@After
 	public void close() throws IOException {
-		this.reader.close();
+		this.indexWriter.close();
 		super.close();
 	}
+
 }
